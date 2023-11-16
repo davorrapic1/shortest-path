@@ -33,12 +33,10 @@ function App() {
     while (queue.length > 0) {
       let current = queue.shift();
 
-      // Check if target is reached
       if (current.x === targetPoint.x && current.y === targetPoint.y) {
         return reconstructPath(cameFrom, startPoint, targetPoint);
       }
 
-      // Explore neighbors
       for (let dir of directions) {
         const next = { x: current.x + dir.x, y: current.y + dir.y };
         const key = `${next.x},${next.y}`;
@@ -57,14 +55,14 @@ function App() {
       }
     }
 
-    return []; // Return empty path if no path is found
+    return []; 
   }
 
   function reconstructPath(cameFrom, startPoint, targetPoint) {
     let current = cameFrom.get(`${targetPoint.x},${targetPoint.y}`);
     let path = [];
 
-    // Start reconstructing the path from the point just before the targetPoint
+
     while (
       current &&
       (current.x !== startPoint.x || current.y !== startPoint.y)
@@ -73,10 +71,9 @@ function App() {
       current = cameFrom.get(`${current.x},${current.y}`);
     }
 
-    return path; // startPoint is not included in the path
+    return path; 
   }
 
-  // Example usage
   const path = findPath(startPoint, targetPoint, rowNumber, columnNumber);
 
   return (
