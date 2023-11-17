@@ -1,22 +1,22 @@
 import Box from "./components/Box.component";
+import useSetup from "./hooks/useSetup";
 
-const rowNumber = 30;
-const columnNumber = 30;
 
-const columnItems = new Array(columnNumber).fill(null);
-const rowItems = new Array(rowNumber).fill(null);
-
-function generateRandomCoordinate(rowNumber, columnNumber) {
-  const x = Math.floor(Math.random() * rowNumber);
-  const y = Math.floor(Math.random() * columnNumber);
-  return { x, y };
-}
-
-const targetPoint = generateRandomCoordinate(rowNumber, columnNumber);
-const startPoint = generateRandomCoordinate(rowNumber, columnNumber);
 
 function App() {
+  const { settings, setSettings } = useSetup();
+
   const coordinates = [];
+
+  setSettings((prev) => {
+    return {
+      ...prev,
+
+    };
+  });
+
+  const columnItems = new Array(settings.columnNumber).fill(null);
+  const rowItems = new Array(settings.rowNumber).fill(null);
 
   function findPath(startPoint, targetPoint, maxRows, maxCols) {
     const directions = [
@@ -55,13 +55,12 @@ function App() {
       }
     }
 
-    return []; 
+    return [];
   }
 
   function reconstructPath(cameFrom, startPoint, targetPoint) {
     let current = cameFrom.get(`${targetPoint.x},${targetPoint.y}`);
     let path = [];
-
 
     while (
       current &&
@@ -71,18 +70,23 @@ function App() {
       current = cameFrom.get(`${current.x},${current.y}`);
     }
 
-    return path; 
+    return path;
   }
 
-  const path = findPath(startPoint, targetPoint, rowNumber, columnNumber);
+  const path = findPath(
+    settings.defaultStart,
+    settings.defaultTarget,
+    settings.rowNumber,
+    settings.columnNumber
+  );
 
   return (
     <div className="h-screen w-screen">
       <div
         className="grid h-full w-full"
         style={{
-          gridTemplateColumns: `repeat(${columnNumber}, 1fr)`,
-          gridTemplateRows: `repeat(${rowNumber}, 1fr)`,
+          gridTemplateColumns: `repeat(${settings.columnNumber}, 1fr)`,
+          gridTemplateRows: `repeat(${settings.rowNumber}, 1fr)`,
         }}
       >
         {columnItems.map((_, indexX) =>
@@ -95,12 +99,13 @@ function App() {
                   x: indexX,
                   y: indexY,
                   isTarget:
-                    indexX === targetPoint.x && indexY === targetPoint.y
+                    indexX === settings.defaultTarget.x &&
+                    indexY === settings.defaultTarget.y
                       ? true
                       : false,
                 }}
                 path={path}
-                start={startPoint}
+                start={settings.defaultStart}
               />
             );
           })
