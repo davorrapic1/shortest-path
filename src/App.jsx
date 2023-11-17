@@ -8,13 +8,6 @@ function App() {
 
   const coordinates = [];
 
-  setSettings((prev) => {
-    return {
-      ...prev,
-
-    };
-  });
-
   const columnItems = new Array(settings.columnNumber).fill(null);
   const rowItems = new Array(settings.rowNumber).fill(null);
 
